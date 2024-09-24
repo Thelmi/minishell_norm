@@ -27,7 +27,7 @@ void	echo(char **command, char echar[MAXARGS])
 	while (command[i])
 	{
 		printf("%s", command[i]);
-		if (command[i + 1] && echar[i] == ' ')
+		if (command[i + 1] && echar[i] == ' ' && command[i][0]!='\0')
 			printf(" ");
 		i++;
 	}
