@@ -49,7 +49,7 @@ char	*allocate_result(char *arg, t_env *envir, int *last_exit_status)
 		perror("malloc");
 		return (NULL);
 	}
-	ft_memset(res, 0, sizeof(*res));
+	ft_memset(res, 0, new_len(arg, envir, last_exit_status) + 1);
 	return (res);
 }
 
