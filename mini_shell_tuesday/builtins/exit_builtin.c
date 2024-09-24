@@ -6,15 +6,15 @@
 /*   By: thelmy <thelmy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/17 21:26:02 by mrhelmy           #+#    #+#             */
-/*   Updated: 2024/09/23 20:11:15 by thelmy           ###   ########.fr       */
+/*   Updated: 2024/09/23 22:27:39 by thelmy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-long long ft_atoi(const char *str)
+long long	ft_atoi(const char *str)
 {
-	int				i;
+	int			i;
 	long long	sign;
 	long long	result;
 
@@ -45,11 +45,11 @@ void	builtin_exit(char **args, int *last_exit_status)
 	exit_status = 0;
 	arg = args[1];
 	printf("exit\n");
-	if (args[2] != NULL) 
+	if (args[2] != NULL)
 	{
 		write(2, "bash: exit: too many arguments\n", 31);
 		*last_exit_status = 1;
-		return;
+		return ;
 	}
 	if (arg != NULL)
 	{

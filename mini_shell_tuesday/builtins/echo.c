@@ -6,7 +6,7 @@
 /*   By: thelmy <thelmy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/27 19:03:09 by krazikho          #+#    #+#             */
-/*   Updated: 2024/09/23 19:57:55 by thelmy           ###   ########.fr       */
+/*   Updated: 2024/09/23 22:25:11 by thelmy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 void	echo(char **command, char echar[MAXARGS])
 {
 	bool	n_flag;
-	int	i;
+	int		i;
 
 	n_flag = false;
 	i = 1;

@@ -6,7 +6,7 @@
 /*   By: thelmy <thelmy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/14 14:58:51 by krazikho          #+#    #+#             */
-/*   Updated: 2024/09/23 19:43:29 by thelmy           ###   ########.fr       */
+/*   Updated: 2024/09/23 20:49:44 by thelmy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -175,7 +175,7 @@ typedef struct main
 }					t_main;
 
 // Main
-void				runcmd(t_main main, char **ev, t_env **envir,
+void				runcmd(t_main main, t_env **envir,
 						t_export **exp, int *last_exit_status);
 int					fork1(void);
 void				panic(char *s);

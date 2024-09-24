@@ -94,7 +94,8 @@ void	update_env(t_env **env, char *variable, char *value,
 	}
 }
 
-void	update_export(t_export **export, char *variable, char *value, int *last_exit_status)
+void	update_export(t_export **export, char *variable, char *value,
+		int *last_exit_status)
 {
 	t_export	*tmp;
 	t_export	*new_node;
@@ -126,64 +127,72 @@ void	update_export(t_export **export, char *variable, char *value, int *last_exi
 	}
 }
 
-void export_with_args(t_env **env, t_export **export, int ac, char **av, int *last_exit_status) {
-    int i = 1;
-    char *variable;
-    char *value;
-    char *export_var;
-	char *export_val;
+void	export_with_args(t_env **env, t_export **export, int ac, char **av,
+		int *last_exit_status)
+{
+	int		i;
+	char	*variable;
+	char	*value;
+	char	*export_var;
+	char	*export_val;
 
-    while (i < ac) {
-        if (ft_strchr(av[i], '=') == NULL)
+	i = 1;
+	while (i < ac)
+	{
+		if (ft_strchr(av[i], '=') == NULL)
 		{
-            if (!is_valid_identifier(av[i])) {
-				write(2,"export: ", 8);
-				write(2, av[i] , ft_strlen(av[i]));
-				write(2, ": not a valid identifier\n", 25);
-                *last_exit_status = 1;
-                i++;
-                continue;
-            }
-            variable = ft_strdup(av[i]);
-            if (!variable) {
-                perror("Error allocating memory for variable");
-                *last_exit_status = 1;
-                return;
-            }
-            update_export(export, variable, NULL, last_exit_status);
-        }
-		else
-		{
-            variable = substr_before_char(av[i], '=');
-            value = substr_after_char(av[i], '=');
-
-            if (variable == NULL || !*variable || !is_valid_identifier(variable)) {
-                write(2, "export: ", 8);
+			if (!is_valid_identifier(av[i]))
+			{
+				write(2, "export: ", 8);
 				write(2, av[i], ft_strlen(av[i]));
 				write(2, ": not a valid identifier\n", 25);
-                free(variable);
-                free(value);
-                *last_exit_status = 1;
-            }
+				*last_exit_status = 1;
+				i++;
+				continue ;
+			}
+			variable = ft_strdup(av[i]);
+			if (!variable)
+			{
+				perror("Error allocating memory for variable");
+				*last_exit_status = 1;
+				return ;
+			}
+			update_export(export, variable, NULL, last_exit_status);
+		}
+		else
+		{
+			variable = substr_before_char(av[i], '=');
+			value = substr_after_char(av[i], '=');
+			if (variable == NULL || !*variable
+				|| !is_valid_identifier(variable))
+			{
+				write(2, "export: ", 8);
+				write(2, av[i], ft_strlen(av[i]));
+				write(2, ": not a valid identifier\n", 25);
+				free(variable);
+				free(value);
+				*last_exit_status = 1;
+			}
 			else
 			{
-                update_env(env, variable, value, last_exit_status);
+				update_env(env, variable, value, last_exit_status);
 				if (variable)
-                	export_var = ft_strdup(variable);
+					export_var = ft_strdup(variable);
 				else
 					export_var = NULL;
-                if (!export_var) {
-                    perror("Error allocating memory for export variable");
-                    free(variable);
-                    free(value);
-                    *last_exit_status = 1;
-                    return;
-                }
+				if (!export_var)
+				{
+					perror("Error allocating memory for export variable");
+					free(variable);
+					free(value);
+					*last_exit_status = 1;
+					return ;
+				}
 				export_val = ft_strdup(value);
-                update_export(export, export_var, export_val, last_exit_status);
+				update_export(export, export_var, export_val, last_exit_status);
 				value = NULL;
-            }
-        }
-        i++;
-    }
+			}
+		}
+		i++;
+	}
 }

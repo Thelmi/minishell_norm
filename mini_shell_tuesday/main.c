@@ -6,7 +6,7 @@
 /*   By: thelmy <thelmy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/14 14:58:22 by krazikho          #+#    #+#             */
-/*   Updated: 2024/09/23 20:37:53 by thelmy           ###   ########.fr       */
+/*   Updated: 2024/09/23 21:00:18 by thelmy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,13 +86,10 @@ static void	initialize_shell(char **ev, t_env **envir, t_export **exp,
 	*exp = storing_export(ev);
 }
 
-static void	command_loop(char **ev, t_env **envir, t_export **exp,
+static void	command_loop(t_env **envir, t_export **exp,
 		t_context *context)
 {
 	char	*command;
-	(void)convert_env;
-    (void)ev;
-    (void)context;
 	while (1)
 	{
         setup_signals();
@@ -111,7 +108,7 @@ static void	command_loop(char **ev, t_env **envir, t_export **exp,
             t_main x = parsecmd(command, *envir, &context->last_exit_status);
             x.command = command;
             if (x.cmd)
-                runcmd(x, ev, envir, exp, &context->last_exit_status);
+                runcmd(x, envir, exp, &context->last_exit_status);
             if (x.cmd)
                 freecmd(x.cmd, 0);
             if (envir && *envir && (*envir)->ev)
@@ -132,6 +129,6 @@ int	main(int ac, char **av, char **ev)
 	(void)ac;
 	(void)av;
 	initialize_shell(ev, &envir, &exp, &context);
-	command_loop(ev, &envir, &exp, &context);
+	command_loop(&envir, &exp, &context);
 	return (context.last_exit_status);
 }

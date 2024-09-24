@@ -6,7 +6,7 @@
 /*   By: thelmy <thelmy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 14:55:09 by krazikho          #+#    #+#             */
-/*   Updated: 2024/09/23 20:08:57 by thelmy           ###   ########.fr       */
+/*   Updated: 2024/09/23 22:20:54 by thelmy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ static int	count_args(char **args)
 static void	execute_command(char **args, t_env **envir, char echar[MAXARGS], int *last_exit_status,
 		t_export **exp)
 {
+	
 	int	count;
 
 	count = count_args(args);
@@ -50,7 +51,6 @@ static void	execute_command(char **args, t_env **envir, char echar[MAXARGS], int
 		else
 			export_no_arg(*exp, last_exit_status);
 	}
-	*last_exit_status = 0;
 }
 
 t_env	*execute_builtin(t_env **envir, char **args, char echar[MAXARGS], int *last_exit_status,
@@ -58,6 +58,7 @@ t_env	*execute_builtin(t_env **envir, char **args, char echar[MAXARGS], int *las
 {
 	if (!args || !args[0])
 		return (*envir);
+	*last_exit_status = 0;
 	execute_command(args, envir, echar, last_exit_status, exp);
 	if (ft_strcmp("unset", args[0]) == true)
 	{
@@ -66,12 +67,10 @@ t_env	*execute_builtin(t_env **envir, char **args, char echar[MAXARGS], int *las
 			unset(envir, count_args(args), args, last_exit_status);
 			unset_export(exp, count_args(args), args, last_exit_status);
 		}
-		*last_exit_status = 0;
 	}
 	else if (ft_strcmp("env", args[0]) == true)
 	{
 		env_func(*envir, last_exit_status);
-		*last_exit_status = 0;
 	}
 	else if (ft_strcmp("exit", args[0]) == true)
 	{

@@ -17,8 +17,6 @@ int fork1(void)
   return pid;
 }
 
-/* Function that will look for the path line inside the environment, will
- split and test each command path and then return the right one. */
 char	*find_path(char *cmd, char **envp)
 {
 	char	**paths;
@@ -55,7 +53,7 @@ char	*find_path(char *cmd, char **envp)
 	return (NULL);
 }
 
-void runcmd(t_main main, char **ev, t_env **envir, t_export **exp, int *last_exit_status)
+void runcmd(t_main main, t_env **envir, t_export **exp, int *last_exit_status)
 {
 	int p[2];
 	struct pipecmd *pcmd;
@@ -81,8 +79,8 @@ void runcmd(t_main main, char **ev, t_env **envir, t_export **exp, int *last_exi
   if (cmd == NULL)
     return;
 
-  saved_stdin = dup(STDIN_FILENO); //close all fds
-	saved_stdout = dup(STDOUT_FILENO);
+  saved_stdin = dup(STDIN_FILENO); 
+  saved_stdout = dup(STDOUT_FILENO);
   
   while (main.heredoc)
   {
@@ -171,7 +169,7 @@ void runcmd(t_main main, char **ev, t_env **envir, t_export **exp, int *last_exi
       input = NULL;
 			return ; 
 		}
-    if (is_builtin(ecmd->argv[0])==true) //free as a builtin, only the execcmd
+    if (is_builtin(ecmd->argv[0])==true) 
     {
       if (input)
       {
@@ -234,18 +232,18 @@ void runcmd(t_main main, char **ev, t_env **envir, t_export **exp, int *last_exi
           int sig = WTERMSIG(status);
           if (sig == SIGINT)
           {
-              write(1, "^C\n", 3);  // Handle Ctrl+C in parent
-              *last_exit_status = 130; // Exit status for Ctrl+C
+              write(1, "^C\n", 3);
+              *last_exit_status = 130;
           }
           else if (sig == SIGQUIT)
           {
-              write(1, "^\\Quit: 3\n", 10);  // Handle Ctrl+\ in parent
-              *last_exit_status = 131;  // Exit status for Ctrl+
-          } 
+              write(1, "^\\Quit: 3\n", 10);
+              *last_exit_status = 131;
+          }
       }
       else
       {
-          *last_exit_status = 0;
+          *last_exit_status = WEXITSTATUS(status);
       }
       close (saved_stdout);
       close (saved_stdin);
@@ -294,7 +292,7 @@ void runcmd(t_main main, char **ev, t_env **envir, t_export **exp, int *last_exi
       close(fd);
     }
     main.cmd = rcmd->cmd;
-		runcmd(main, ev, envir, exp, last_exit_status); // WARNING!!! make sure everything is free here, this is a recursive call WARNING!!!
+		runcmd(main, envir, exp, last_exit_status); // WARNING!!! make sure everything is free here, this is a recursive call WARNING!!!
 		dup2(saved_stdout, 1);
 		dup2(saved_stdin, 0);
     close (saved_stdout);
@@ -337,10 +335,10 @@ void runcmd(t_main main, char **ev, t_env **envir, t_export **exp, int *last_exi
         if (dup2(p[1], STDOUT_FILENO) < 0)
           panic("dup2 failed");
         close(p[1]);
-        main.cmd = pcmd->left; //save the address correctly before modifying it for the next call. otherwise, you'll lose the pipe node and left/right orders and addressses
+        main.cmd = pcmd->left;
         close (saved_stdout);
         close (saved_stdin);
-        runcmd(main, ev, envir, exp, last_exit_status);
+        runcmd(main, envir, exp, last_exit_status);
         free(main.command);
         free_double_pointer((*envir)->ev);
         free_env(*envir);
@@ -352,7 +350,7 @@ void runcmd(t_main main, char **ev, t_env **envir, t_export **exp, int *last_exi
     else
     {
       stopping_cat = 1;
-      if (pcmd->right->type != PIPE && ft_strcmp(((struct execcmd*)pcmd->right)->argv[0], "cat") && !(((struct execcmd*)pcmd->right)->argv[1]))
+      if (pcmd->right->type  && ft_strcmp(((struct execcmd*)pcmd->right)->argv[0], "cat") && !(((struct execcmd*)pcmd->right)->argv[1]))
         cat_counter = 0;
 			// {
     }
@@ -372,23 +370,23 @@ void runcmd(t_main main, char **ev, t_env **envir, t_export **exp, int *last_exi
       close (saved_stdin);
       if (ft_strcmp(ecmd->argv[0], "cat"))
           ecmd->cat_flag = 0;
-			runcmd(main, ev, envir, exp, last_exit_status); //WARNING!!! recursive call
+			runcmd(main, envir, exp, last_exit_status); //WARNING!!! recursive call
       // free(tmp_main);
       free(main.command);
       free_double_pointer((*envir)->ev);
       free_env(*envir);
       free_export(*exp);
       freecmd(main.main_cmd, 0);
-			exit(*last_exit_status);
+		exit(*last_exit_status);
 		}
     if (pcmd->right->type == PIPE)
       cat_counter = 0;
 		close(p[0]);
 		close(p[1]);
 		wait(&status);
-    close (saved_stdout);
-    close (saved_stdin);
-	  *last_exit_status = WEXITSTATUS(status);
+		*last_exit_status = WEXITSTATUS(status);
+    	close (saved_stdout);
+    	close (saved_stdin);
 	}
  
   char *user_string;
