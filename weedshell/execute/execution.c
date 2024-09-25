@@ -138,8 +138,6 @@ void runcmd(t_main main, t_env **envir, t_export **exp, int *last_exit_status, i
       //   printf("nonnonoXnononononononononononono\n"); 
       return ;
     }
-    signal(SIGQUIT, SIG_IGN);
-    signal(SIGINT, SIG_IGN);
     if (fork() == 0)
     {
       signal(SIGQUIT, SIG_DFL);
@@ -379,6 +377,8 @@ void runcmd(t_main main, t_env **envir, t_export **exp, int *last_exit_status, i
   if (input)
     free(input);
   input = NULL;
+  signal(SIGINT, SIG_DFL);
+  signal(SIGQUIT, SIG_DFL);
   while (cat_counter)
   {
     user_string = readline(NULL);
