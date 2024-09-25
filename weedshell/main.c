@@ -103,6 +103,8 @@ static void	command_loop(t_env **envir, t_export **exp,
 		}
 		if (*command)
 		{
+			                signal(SIGQUIT, SIG_IGN);
+    signal(SIGINT, SIG_IGN);
 			(*envir)->ev = convert_env(envir);
             fill_env(envir, (*envir)->ev);
 			add_history(command);
