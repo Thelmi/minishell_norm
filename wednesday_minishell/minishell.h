@@ -6,7 +6,7 @@
 /*   By: thelmy <thelmy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/14 14:58:51 by krazikho          #+#    #+#             */
-/*   Updated: 2024/09/25 18:56:45 by thelmy           ###   ########.fr       */
+/*   Updated: 2024/09/23 20:49:44 by thelmy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -172,6 +172,14 @@ typedef struct main
 	struct cmd		*main_cmd;
 	struct heredoc	*heredoc;
 	char			*command;
+
+	struct pipecmd *pcmd;
+	struct execcmd *ecmd;
+	struct redircmd *rcmd;
+	int saved_stdin;
+	int saved_stdout;
+	int status;
+	int p[2];
 }					t_main;
 
 // Main
@@ -213,7 +221,7 @@ void				modify_args(char **args, t_env *envir,
 bool				is_builtin(char *command);
 char				*allocate_result(char *arg, t_env *envir,
 						int *last_exit_status);
-int					handle_exit_status(char *res, int *last_exit_status);
+int					handle_exit_status(char *res, int j, int *last_exit_status);
 int					handle_var_expansion(char *res, char *arg, int *i,
 						t_env *envir);
 int					handle_exit_status_len(int *last_exit_status);
@@ -265,5 +273,6 @@ int					ft_isalpha(int c);
 
 // runcmd
 char	*find_path(char *cmd, char **envp);
+char	*heredoc_exec(t_main main, int *last_exit_status, int *has_heredoc);
 
 #endif
