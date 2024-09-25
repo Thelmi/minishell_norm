@@ -6,7 +6,7 @@
 /*   By: thelmy <thelmy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/14 14:58:51 by krazikho          #+#    #+#             */
-/*   Updated: 2024/09/23 20:49:44 by thelmy           ###   ########.fr       */
+/*   Updated: 2024/09/25 19:42:42 by thelmy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -221,7 +221,7 @@ void				modify_args(char **args, t_env *envir,
 bool				is_builtin(char *command);
 char				*allocate_result(char *arg, t_env *envir,
 						int *last_exit_status);
-int					handle_exit_status(char *res, int j, int *last_exit_status);
+int					handle_exit_status(char *res , int *last_exit_status);
 int					handle_var_expansion(char *res, char *arg, int *i,
 						t_env *envir);
 int					handle_exit_status_len(int *last_exit_status);
