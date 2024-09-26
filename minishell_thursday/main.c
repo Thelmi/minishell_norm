@@ -6,32 +6,103 @@
 /*   By: thelmy <thelmy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/14 14:58:22 by krazikho          #+#    #+#             */
-/*   Updated: 2024/09/25 22:29:27 by thelmy           ###   ########.fr       */
+/*   Updated: 2024/09/25 18:51:51 by thelmy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+static char *concat_var_value(const char *variable, const char *value) {
+    size_t var_len = ft_strlen(variable);
+    size_t val_len = ft_strlen(value);
+    char *result = malloc(var_len + val_len + 2);
+
+    if (result == NULL) {
+        perror("malloc");
+        return NULL;
+    }
+    ft_strlcpy(result, variable, var_len + 1);
+    result[var_len] = '=';
+    ft_strlcpy(result + var_len + 1, value, val_len + 1);
+    return result;
+}
+
+void fill_env(t_env **env, char **ev)
+{
+    t_env *tmp;
+
+    tmp = *(env);
+    while (tmp)
+    {
+        tmp->ev = ev;
+        tmp = tmp->next;
+    }
+}
+
+static char **convert_env(t_env **env) {
+    int count = 0;
+    t_env *temp = *env; 
+
+    while (temp) {
+        count++;
+        temp = temp->next;
+    }
+
+    char **env_array = malloc((count + 1) * sizeof(char *));
+    if (env_array == NULL) {
+        perror("malloc");
+        return NULL;
+    }
+
+    temp = *env;
+    int i = 0;
+    while (temp) {
+        env_array[i] = concat_var_value(temp->variable, temp->value);
+        if (env_array[i] == NULL) {
+            int j = 0;
+            while (j < i) {
+                free(env_array[j]);
+                j++;
+            }
+            free(env_array);
+            return NULL;
+        }
+        i++;
+        temp = temp->next;
+    }
+
+    env_array[count] = NULL;
+    return env_array;
+}
 
 static void	initialize_shell(char **ev, t_env **envir, t_export **exp,
 		t_context *context)
 {
 	context->last_exit_status = 0;
 	configure_terminal_behavior();
+
 	*envir = storing_env(ev);
 	*exp = storing_export(ev);
 }
 
-static void	command_loop(t_env **envir, t_export **exp, t_context *context)
+static void	command_loop(t_env **envir, t_export **exp,
+		t_context *context)
 {
-	char		*command;
-	static int	start;
-	t_main		x;
-
+	char	*command;
+    static int start; //was static
+    static int start2;
+    static int start3;
+    static int start4;
+    static int start5;
 	while (1)
 	{
-		setup_signals();
+        setup_signals();
 		command = readline("minishell$ ");
-		start = 0;
+		//command = get_next_line(0);
+        start = 0;
+        start2 = 0;
+        start4 = 0;
+        start5 = 0;
 		if (command == NULL)
 		{
 			write(1, "exit\n", 5);
@@ -39,24 +110,31 @@ static void	command_loop(t_env **envir, t_export **exp, t_context *context)
 		}
 		if (*command)
 		{
-			if (envir && *envir)
-			{
+			if(envir && *envir){
 				(*envir)->ev = convert_env(envir);
 				signal(SIGQUIT, SIG_IGN);
 				signal(SIGINT, SIG_IGN);
 				fill_env(envir, (*envir)->ev);
 				add_history(command);
-				x = parsecmd(command, *envir, &context->last_exit_status);
+				t_main x = parsecmd(command, *envir, &context->last_exit_status);
 				x.command = command;
+                x.start = &start;
+                x.input = NULL;
+                x.cat_counter = &start;
+                x.stop_cat = &start2;
+                x.has_heredoc = &start3;
+                x.executed_heredoc = &start4;
+                x.stop_cat_right_child = &start5;
 				if (x.cmd)
-					runcmd(x, envir, exp, &context->last_exit_status, start);
+					runcmd(x, envir, exp, &context->last_exit_status);
 				if (x.cmd)
 					freecmd(x.cmd, 0);
 				if (envir && *envir && (*envir)->ev)
 					free_double_pointer((*envir)->ev);
-			}
-			else
+			}else{
 				printf("such a dangerous behavior, keep ur children safe\n");
+			}
+
 		}
 		free(command);
 	}

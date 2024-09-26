@@ -6,7 +6,7 @@
 /*   By: thelmy <thelmy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/14 14:58:51 by krazikho          #+#    #+#             */
-/*   Updated: 2024/09/26 03:47:55 by thelmy           ###   ########.fr       */
+/*   Updated: 2024/09/25 19:42:42 by thelmy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,7 +130,7 @@ int	env_path(t_env *env, int *last_exit_status);
 typedef struct cmd
 {
 	int				type;
-}t_cmd;
+}cmd;
 
 typedef struct execcmd
 {
@@ -180,12 +180,27 @@ typedef struct main
 	int saved_stdout;
 	int status;
 	int p[2];
+	int *start;
+	char *input;
+	int *cat_counter;
+	int *stop_cat;
+	int* has_heredoc;
+	int* executed_heredoc;
+	int* stop_cat_right_child;
 }					t_main;
+
+typedef struct parseexec
+{
+	char *q;
+	char *eq;
+	int tok;
+	int argc;
+} t_parseexec;
 
 // Main
 // void				runcmd(t_main main, t_env **envir,
 // 						t_export **exp, int *last_exit_status);
-void runcmd(t_main main, t_env **envir, t_export **exp, int *last_exit_status, int start);
+void runcmd(t_main main, t_env **envir, t_export **exp, int *last_exit_status);
 
 int					fork1(void);
 void				panic(char *s);
@@ -274,7 +289,8 @@ int					ft_isalpha(int c);
 // runcmd
 char	*find_path(char *cmd, char **envp);
 char	*heredoc_exec(t_main main, int *last_exit_status, int *has_heredoc);
+void redir(t_main main, t_env **envir, t_export **exp, int *last_exit_status);
+void exec(t_main main, t_env **envir, t_export **exp, int *last_exit_status);
+void exec_pipe(t_main main, t_env **envir, t_export **exp, int *last_exit_status);
 
-void	fill_env(t_env **env, char **ev);
-char	**convert_env(t_env **env);
 #endif
