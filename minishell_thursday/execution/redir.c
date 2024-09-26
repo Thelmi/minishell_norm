@@ -59,4 +59,4 @@ void redir(t_main main, t_env **envir, t_export **exp, int *last_exit_status)
     close (main.saved_stdout);
     close (main.saved_stdin);
 		return;
-} 
+}

@@ -23,8 +23,6 @@ int execute_cmd(t_main main, t_env **envir, t_export **exp, int *last_exit_statu
     exec_pipe(main, envir, exp, last_exit_status); 
     *(main.cat_counter) = 0;
   }
-  // close (main.saved_stdout);
-  // close (main.saved_stdin);
   return (1);
 }
 
@@ -47,10 +45,10 @@ void runcmd(t_main main, t_env **envir, t_export **exp, int *last_exit_status)
   main.status = 0;
   if (*(main.start) == 0)
   {
-    printf("initialize\n"); //remove this line, DEBUGGING
-    *(main.stop_cat) = 0;
-      *(main.cat_counter) = 0;
-      *(main.start) = 1;
+    printf("initialize\n");
+	  *(main.stop_cat) = 0;
+	  *(main.cat_counter) = 0;
+	  *(main.start) = 1;
   }
   if (!execute_cmd(main, envir, exp, last_exit_status))
     return ;
@@ -59,7 +57,6 @@ void runcmd(t_main main, t_env **envir, t_export **exp, int *last_exit_status)
   main.input = NULL;
 	signal(SIGQUIT, SIG_DFL);
 	signal(SIGINT, SIG_DFL);
-  // free, free all incase there is a signal. You can use a global variable
   cat_user_input(main);
 	return ;
 }

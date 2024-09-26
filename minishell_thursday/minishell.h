@@ -6,7 +6,7 @@
 /*   By: thelmy <thelmy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/14 14:58:51 by krazikho          #+#    #+#             */
-/*   Updated: 2024/09/25 19:42:42 by thelmy           ###   ########.fr       */
+/*   Updated: 2024/09/26 15:57:14 by thelmy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,7 +130,7 @@ int	env_path(t_env *env, int *last_exit_status);
 typedef struct cmd
 {
 	int				type;
-}cmd;
+} t_cmd;
 
 typedef struct execcmd
 {
@@ -285,6 +285,8 @@ char				*ft_strchr(const char *s, int c);
 void				*ft_memset(void *b, int c, size_t len);
 int					ft_isdigit(int c);
 int					ft_isalpha(int c);
+void	fill_env(t_env **env, char **ev);
+char	**convert_env(t_env **env);
 
 // runcmd
 char	*find_path(char *cmd, char **envp);

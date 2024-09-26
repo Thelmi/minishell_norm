@@ -49,9 +49,8 @@ static char *user_input_heredoc(t_main main, char *input, char *tmp2)
 {
     char *read = NULL;
     char *tmp_input;
-    // char *tmp_input2;
 
-    write (1, "> ", 2); //readline instead?
+    write (1, "> ", 2);
     read = get_next_line(0);
     tmp_input = ft_substr(read, 0, ft_strlen(read) - 1);
     free (read);
@@ -66,18 +65,7 @@ static char *user_input_heredoc(t_main main, char *input, char *tmp2)
     }
     if (main.heredoc->next == NULL)
     {
-        // printf("OOOOOO\n");
         input = join_input(input, read);
-        // tmp_input = ft_strjoin(read, "\n");
-        // if (!input)
-        //     tmp_input2 = tmp_input;
-        // else
-        // {
-        //     tmp_input2 = ft_strjoin(input, tmp_input);
-        //     free(input);
-        //     free(tmp_input);
-        // }
-        // input = tmp_input2;
     }
     else
     {
@@ -106,7 +94,6 @@ static char *verify_heredoc(t_main main, struct heredoc **heredoc, char *input, 
             input = NULL;
             continue ;
         }
-        // if (tmp && main.heredoc->next == NULL)
         input = tmp;
     }
     free(tmp2);
@@ -130,7 +117,7 @@ char *heredoc_exec(t_main main, int *last_exit_status, int *has_heredoc)
         if (tmp2 == NULL) 
         {
             perror("Error allocating memory for heredoc delimiter");
-            *last_exit_status = 1; // General error
+            *last_exit_status = 1;
             return 0;
         }
         *has_heredoc = 1;
