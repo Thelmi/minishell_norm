@@ -108,15 +108,17 @@ void exec_pipe(t_main main, t_env **envir, t_export **exp, int *last_exit_status
   if (main.input)
     free (main.input);
   main.input = NULL;
-  if (pipe(main.p) < 0)
-    panic("pipe failed");
   (main.ecmd) = (struct execcmd*)(main.pcmd)->left;
   if ((main.ecmd)->argv[0] == NULL)
   {
     printf("bash: syntax error near unexpected token `|\n");
+    close (main.saved_stdout);
+    close (main.saved_stdin);
     *last_exit_status = 2;
     return ;
   }
+  if (pipe(main.p) < 0)
+    panic("pipe failed");
   if (!run_pipe(main, envir, exp, last_exit_status))
     return ;
 }
