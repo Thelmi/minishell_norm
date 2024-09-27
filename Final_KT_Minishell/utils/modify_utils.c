@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   modify_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mrhelmy <mrhelmy@student.42.fr>            +#+  +:+       +#+        */
+/*   By: krazikho <krazikho@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/17 21:08:46 by krazikho          #+#    #+#             */
-/*   Updated: 2024/09/26 22:39:36 by mrhelmy          ###   ########.fr       */
+/*   Updated: 2024/09/27 14:44:15 by krazikho         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ static int	new_len(char *arg, t_env *envir, int *last_exit_status)
 			free(str);
 			i += 2;
 		}
-		else if (arg[i] == '$' && ft_isalnum(arg[i + 1]))
+		else if (arg[i] == '$' && (ft_isalnum(arg[i + 1])|| arg[i + 1]=='_'))
 			len += handle_var_len(arg, &i, envir);
 		else
 		{
