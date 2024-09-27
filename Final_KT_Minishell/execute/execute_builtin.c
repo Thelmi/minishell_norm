@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: mrhelmy <mrhelmy@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/08/19 14:55:09 by krazikho          #+#    #+#             */
-/*   Updated: 2024/09/26 19:39:29 by mrhelmy          ###   ########.fr       */
+/*   Created: 2024/09/27 11:18:43 by mrhelmy           #+#    #+#             */
+/*   Updated: 2024/09/27 11:18:46 by mrhelmy          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,11 +22,16 @@ static int	count_args(char **args)
 	return (count);
 }
 
-static void	execute_command(char **args, t_env **envir, char echar[MAXARGS],
+static void	execute_command(t_norm x, char echar[MAXARGS],
 	int *last_exit_status, t_export **exp)
 {
 	int	count;
+	t_norm y;
 
+	char **args = (char **)(x.var1);
+	t_env **envir = (t_env **)(x.var2);
+	y.var1 = (void**)args;
+	y.var2 = (void**)envir;
 	count = count_args(args);
 	if (ft_strcmp("echo", args[0]) == true)
 		echo(args, echar);
@@ -37,19 +42,26 @@ static void	execute_command(char **args, t_env **envir, char echar[MAXARGS],
 	else if (ft_strcmp("export", args[0]) == true)
 	{
 		if (args[1] != NULL)
-			export_with_args(envir, exp, count, args, last_exit_status);
+			export_with_args(y, exp, count, last_exit_status);
 		else
 			export_no_arg(*exp, last_exit_status);
 	}
 }
 
-t_env	*execute_builtin(t_env **envir, char **args, char echar[MAXARGS],
+t_env	*execute_builtin(t_norm x, char echar[MAXARGS],
 	int *last_exit_status, t_export **exp)
 {
+	t_norm y;
+
+	t_env **envir = (t_env **)(x.var1);
+	char **args = (char **)(x.var2);
 	if (!args || !args[0])
 		return (*envir);
 	*last_exit_status = 0;
-	execute_command(args, envir, echar, last_exit_status, exp);
+	y.var1 = (void**)args;
+	y.var2 = (void**)envir;
+	execute_command(y, echar, last_exit_status, exp);
+	// execute_command(args, envir, echar, last_exit_status, exp);
 	if (ft_strcmp("unset", args[0]) == true)
 	{
 		if (args[1] != NULL)

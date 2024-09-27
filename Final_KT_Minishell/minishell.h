@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: mrhelmy <mrhelmy@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/08/14 14:58:51 by krazikho          #+#    #+#             */
-/*   Updated: 2024/09/26 19:56:01 by mrhelmy          ###   ########.fr       */
+/*   Created: 2024/09/27 11:16:49 by mrhelmy           #+#    #+#             */
+/*   Updated: 2024/09/27 11:16:53 by mrhelmy          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,12 @@
 # define PIPE 4
 # define HEREDOC 5
 # define MAXARGS 10000
+
+typedef struct s_norm
+{
+	void **var1;
+	void **var2;
+}t_norm;
 
 typedef struct s_context
 {
@@ -80,8 +86,10 @@ void				export_no_arg(t_export *export, int *last_exit_status);
 int					is_valid_identifier(const char *str);
 void				update_env(t_env **env, char *variable, char *value,
 						int *last_exit_status);
-void				export_with_args(t_env **env, t_export **export, int ac,
-						char **av, int *last_exit_status);
+// void				export_with_args(t_env **env, t_export **export, int ac,
+// 						char **av, int *last_exit_status);
+void	export_with_args(t_norm x, t_export **export, int ac,
+	int *last_exit_status);
 int					num_strncmp(char *s1, char *s2);
 
 // unset_practice
@@ -214,23 +222,25 @@ struct cmd			*parseexec(char **ps, char *es, struct heredoc **heredoc,
 						int *last_exit_status);
 
 // Parse redirections
-struct cmd			*parseredirs(struct cmd *cmd, char **ps, char *es,
-						struct heredoc **heredoc, int *last_exit_status);
+t_cmd*	parseredirs(t_norm x, t_cmd *cmd, char *es, int *last_exit_status);
+// struct cmd			*parseredirs(struct cmd *cmd, char **ps, char *es,
+// 						struct heredoc **heredoc, int *last_exit_status);
 int					gettoken(char **ps, char *es, char **q, char **eq);
 struct cmd			*pipecmd(struct cmd *left, struct cmd *right);
 // struct cmd			*nulterminate(struct cmd *cmd);
 struct cmd* nulterminate(struct cmd *cmd, t_env *envir, int *last_exit_status);
 struct cmd			*execcmd(void);
-struct cmd			*redircmd(struct cmd *subcmd, char *file, char *efile,
-						int mode, int fd);
+struct cmd* redircmd(struct cmd *subcmd, t_norm x, int mode, int fd);
+// struct cmd			*redircmd(struct cmd *subcmd, char *file, char *efile,
+// 						int mode, int fd);
 void				redircmd_h(char *argv, char *eargv,
 						struct heredoc **heredoc);
 struct cmd* expand_tree(struct cmd *cmd, t_env *envir, int *last_exit_status);
 
 
 // execution
-t_env				*execute_builtin(t_env **envir, char **args, char echar[MAXARGS],
-						int *last_exit_status, t_export **exp);
+t_env	*execute_builtin(t_norm x, char echar[MAXARGS],
+	int *last_exit_status, t_export **exp);
 void				modify_args(char **args, t_env *envir,
 						int *last_exit_status);
 bool				is_builtin(char *command);

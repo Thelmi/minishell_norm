@@ -5,21 +5,26 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: mrhelmy <mrhelmy@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/08/21 18:10:03 by mrhelmy           #+#    #+#             */
-/*   Updated: 2024/09/26 22:54:30 by mrhelmy          ###   ########.fr       */
+/*   Created: 2024/09/27 11:18:03 by mrhelmy           #+#    #+#             */
+/*   Updated: 2024/09/27 11:18:06 by mrhelmy          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-void	export_with_args(t_env **env, t_export **export, int ac, char **av,
-		int *last_exit_status)
+// void	export_with_args(t_env **env, t_export **export, int ac, char **av,
+// 	int *last_exit_status)
+void	export_with_args(t_norm x, t_export **export, int ac,
+	int *last_exit_status)
 {
 	int		i;
 	char	*variable;
 	char	*value;
 	char	*export_var;
 	char	*export_val;
+	
+	char **av = (char **)(x.var1);
+	t_env **env = (t_env **)(x.var2);
 
 	i = 1;
 	while (i < ac)

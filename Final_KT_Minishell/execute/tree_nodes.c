@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: mrhelmy <mrhelmy@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/09/26 03:10:43 by thelmy            #+#    #+#             */
-/*   Updated: 2024/09/26 21:45:50 by mrhelmy          ###   ########.fr       */
+/*   Created: 2024/09/27 11:21:01 by mrhelmy           #+#    #+#             */
+/*   Updated: 2024/09/27 11:21:05 by mrhelmy          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 struct cmd* execcmd(void)
 {
-  struct execcmd *cmd;
+  struct execcmd  *cmd;
 
   cmd = malloc(sizeof(*cmd));
   if (!cmd)
@@ -57,11 +57,15 @@ static struct cmd *sort_redir_nodes(struct cmd *subcmd, struct cmd *tmp, struct 
     tmp2->cmd = (struct cmd*)cmd;
     return (tmp);
 }
-struct cmd* redircmd(struct cmd *subcmd, char *file, char *efile, int mode, int fd)
+
+// struct cmd* redircmd(struct cmd *subcmd, char *file, char *efile, int mode, int fd)
+struct cmd* redircmd(struct cmd *subcmd, t_norm x, int mode, int fd)
 {
   struct redircmd *cmd;
   struct cmd *tmp;
 
+  char *file = (char *)(x.var1);
+  char *efile = (char *)(x.var2);
   cmd = malloc(sizeof(*cmd));
   if (!cmd)
   {
@@ -79,8 +83,6 @@ struct cmd* redircmd(struct cmd *subcmd, char *file, char *efile, int mode, int 
   cmd->mode = mode;
   cmd->fd = fd;
   if (subcmd && subcmd->type == REDIR)
-  {
     return (subcmd);
-  }
-  return (struct cmd*)cmd;
+  return ((struct cmd *)cmd);
 }

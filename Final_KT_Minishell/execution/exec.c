@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   exec.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mrhelmy <mrhelmy@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/09/27 11:27:11 by mrhelmy           #+#    #+#             */
+/*   Updated: 2024/09/27 11:27:12 by mrhelmy          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../minishell.h"
 
 void cat_with_heredoc(t_main main, t_env **envir, t_export **exp)
@@ -120,6 +132,7 @@ int valid_args(t_main main, int *last_exit_status)
 
 void exec(t_main main, t_env **envir, t_export **exp, int *last_exit_status)
 {
+  t_norm x;
   struct cmd *cmd = main.cmd;
   
   close (main.saved_stdout);
@@ -132,7 +145,10 @@ void exec(t_main main, t_env **envir, t_export **exp, int *last_exit_status)
     if (main.input)
       free (main.input);
     main.input = NULL;
-    *envir = execute_builtin(envir , (main.ecmd)->argv, (main.ecmd)->echar, last_exit_status, exp); 
+    x.var1 = (void**)envir;
+	  x.var2 = (void**)((main.ecmd)->argv);
+    *envir = execute_builtin(x, (main.ecmd)->echar, last_exit_status, exp);
+    // *envir = execute_builtin(envir , (main.ecmd)->argv, (main.ecmd)->echar, last_exit_status, exp); 
     return ;
   }
   if (fork() == 0)

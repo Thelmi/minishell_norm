@@ -5,13 +5,12 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: mrhelmy <mrhelmy@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/09/26 03:10:43 by thelmy            #+#    #+#             */
-/*   Updated: 2024/09/26 21:54:31 by mrhelmy          ###   ########.fr       */
+/*   Created: 2024/09/27 11:19:22 by mrhelmy           #+#    #+#             */
+/*   Updated: 2024/09/27 11:19:27 by mrhelmy          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
-
 
 t_main parsecmd(char *s, t_env *envir, int *last_exit_status)
 {
@@ -39,12 +38,16 @@ t_main parsecmd(char *s, t_env *envir, int *last_exit_status)
     return (main);
 }
 
-t_cmd*	parseredirs(t_cmd *cmd, char **ps, char *es, t_heredoc **heredoc, int *last_exit_status)
+// t_cmd*	parseredirs(t_cmd *cmd, char **ps, char *es, t_heredoc **heredoc, int *last_exit_status)
+t_cmd*	parseredirs(t_norm x, t_cmd *cmd, char *es, int *last_exit_status)
 {
 	int		tok;
 	char	*q;
 	char	*eq;
+	t_norm	y;
 
+	char **ps = (char **)(x.var1);
+	t_heredoc **heredoc = (t_heredoc **)(x.var2);
 	while (peek(ps, es, "<>"))
 	{
 		tok = gettoken(ps, es, 0, 0);
@@ -56,12 +59,14 @@ t_cmd*	parseredirs(t_cmd *cmd, char **ps, char *es, t_heredoc **heredoc, int *la
 			cmd = NULL;
 			return (NULL);
 		}
+		y.var1 = (void**)q;
+		y.var2 = (void**)eq;
 		if (tok == '<')
-			cmd = redircmd(cmd, q, eq, O_RDONLY, 0);
+			cmd = redircmd(cmd, y, O_RDONLY, 0);
 		else if (tok == '>')
-			cmd = redircmd(cmd, q, eq, O_WRONLY | O_CREAT | O_TRUNC, 1);
+			cmd = redircmd(cmd, y, O_WRONLY | O_CREAT | O_TRUNC, 1);
 		else if (tok == '+')
-			cmd = redircmd(cmd, q, eq, O_WRONLY | O_CREAT | O_APPEND, 1);
+			cmd = redircmd(cmd, y, O_WRONLY | O_CREAT | O_APPEND, 1);
 		else if (tok == 'h')
 			redircmd_h(q, eq, heredoc);
 	}
@@ -91,6 +96,7 @@ t_cmd*	parseexec(char **ps, char *es, t_heredoc **heredoc, int *last_exit_status
 	int			argc;
 	t_execcmd	*cmd;
 	t_cmd		*ret;
+	t_norm x;
 
 	ret = execcmd();
 	if (!ret)
@@ -101,7 +107,11 @@ t_cmd*	parseexec(char **ps, char *es, t_heredoc **heredoc, int *last_exit_status
 	}
 	cmd = (t_execcmd *)ret;
 	argc = 0;
-	ret = parseredirs(ret, ps, es, heredoc, last_exit_status);
+
+	x.var1 = (void**)ps;
+	x.var2 = (void**)heredoc;
+	ret = parseredirs(x, ret, es, last_exit_status);
+	// ret = parseredirs(ret, ps, es, heredoc, last_exit_status);
 	if (!ret)
 		return (NULL);
 	while (ret && !peek(ps, es, "|"))
@@ -118,7 +128,9 @@ t_cmd*	parseexec(char **ps, char *es, t_heredoc **heredoc, int *last_exit_status
 		cmd->argv[argc] = q;
 		cmd->eargv[argc] = eq;
 		argc++;
-		ret = parseredirs(ret, ps, es, heredoc, last_exit_status);
+		x.var1 = (void**)ps;
+		x.var2 = (void**)heredoc;
+		ret = parseredirs(x, ret, es, last_exit_status);
 	}
 	if (ret && cmd && cmd->argv[argc])
 		cmd->argv[argc] = 0;
