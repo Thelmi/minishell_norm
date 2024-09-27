@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   modify_args.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: thelmy <thelmy@student.42.fr>              +#+  +:+       +#+        */
+/*   By: krazikho <krazikho@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/27 19:04:39 by krazikho          #+#    #+#             */
-/*   Updated: 2024/09/26 03:10:31 by thelmy           ###   ########.fr       */
+/*   Updated: 2024/09/27 14:41:23 by krazikho         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ static char	*no_quotes(char *arg, t_env *envir, int *last_exit_status)
 			j = handle_exit_status(res, last_exit_status);
 			i += 2;
 		}
-		else if (arg[i] == '$' && ft_isalnum(arg[i + 1]))
+		else if (arg[i] == '$' && (ft_isalnum(arg[i + 1])|| arg[i + 1]=='_'))
 		{
 			j = handle_var_expansion(res, arg, &i, envir);
 		}
