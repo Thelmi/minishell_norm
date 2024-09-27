@@ -3,14 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   unset_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mrhelmy <mrhelmy@student.42.fr>            +#+  +:+       +#+        */
+/*   By: thelmy <thelmy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/25 23:07:54 by thelmy            #+#    #+#             */
-/*   Updated: 2024/09/26 22:32:58 by mrhelmy          ###   ########.fr       */
+/*   Updated: 2024/09/27 16:50:59 by thelmy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
+
 static void	free_first_exp_node(t_export **exp, t_export *tmp)
 {
 	*exp = tmp->next;

@@ -3,16 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mrhelmy <mrhelmy@student.42.fr>            +#+  +:+       +#+        */
+/*   By: thelmy <thelmy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 11:16:49 by mrhelmy           #+#    #+#             */
-/*   Updated: 2024/09/27 11:16:53 by mrhelmy          ###   ########.fr       */
+/*   Updated: 2024/09/27 17:57:33 by thelmy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
-//# include <ctype.h>
 # include <fcntl.h>
 # include <limits.h>
 # include <readline/history.h>
@@ -21,14 +20,12 @@
 # include <stdbool.h>
 # include <stdio.h>
 # include <stdlib.h>
-//# include <string.h>
 # include <sys/wait.h>
 # include <termios.h>
 # include <time.h>
 # include <unistd.h>
 
 # define BUFFER_SIZE 1
-
 # define EXEC 1
 # define BUILTIN 2
 # define REDIR 3
@@ -38,20 +35,20 @@
 
 typedef struct s_norm
 {
-	void **var1;
-	void **var2;
-}t_norm;
+	void			**var1;
+	void			**var2;
+}					t_norm;
 
 typedef struct s_context
 {
 	int				last_exit_status;
-}t_context;
+}					t_context;
 
 typedef struct env
 {
 	char			*variable;
 	char			*value;
-	char 			**ev;
+	char			**ev;
 	struct env		*next;
 }					t_env;
 
@@ -60,9 +57,7 @@ typedef struct export
 	char			*variable;
 	char			*value;
 	struct export	*next;
-}t_export;
-
-// Functions used to store the enironment in the struct
+}	t_export;
 
 t_env				*create_env_nodes(char *variable_content,
 						char *value_content);
@@ -71,7 +66,6 @@ t_export			*storing_export(char **ev);
 t_export			*create_export_nodes(char *variable_content,
 						char *value_content);
 
-// Builtins
 void				env_func(t_env *env, int *last_exit_status);
 void				pwd(int *last_exit_status);
 void				cd(char **args, t_env **envir, int *last_exit_status);
@@ -88,13 +82,14 @@ void				update_env(t_env **env, char *variable, char *value,
 						int *last_exit_status);
 // void				export_with_args(t_env **env, t_export **export, int ac,
 // 						char **av, int *last_exit_status);
-void	export_with_args(t_norm x, t_export **export, int ac,
-	int *last_exit_status);
+void				export_with_args(t_norm x, t_export **export, int ac,
+						int *last_exit_status);
 int					num_strncmp(char *s1, char *s2);
 
 // unset_practice
 void				unset_env(t_env **env, char *variable);
-void	unset_export(t_export **exp, int ac, char **av, int *last_exit_status);
+void				unset_export(t_export **exp, int ac, char **av,
+						int *last_exit_status);
 void				unset(t_env **env, int ac, char **av,
 						int *last_exit_status);
 
@@ -125,8 +120,7 @@ int					ft_isalnum(int c);
 int					ft_num_len(int n);
 
 // Random utils
-int	env_path(t_env *env, int *last_exit_status);
-
+int					env_path(t_env *env, int *last_exit_status);
 //////parse & execute
 // # define EXEC 1
 // # define BUILTIN 2
@@ -138,7 +132,7 @@ int	env_path(t_env *env, int *last_exit_status);
 typedef struct cmd
 {
 	int				type;
-} t_cmd;
+}					t_cmd;
 
 typedef struct execcmd
 {
@@ -147,7 +141,7 @@ typedef struct execcmd
 	char			*eargv[MAXARGS];
 	char			echar[MAXARGS];
 	int				cat_flag;
-}t_execcmd;
+}					t_execcmd;
 
 typedef struct heredoc
 {
@@ -181,34 +175,38 @@ typedef struct main
 	struct heredoc	*heredoc;
 	char			*command;
 
-	struct pipecmd *pcmd;
-	struct execcmd *ecmd;
-	struct redircmd *rcmd;
-	int saved_stdin;
-	int saved_stdout;
-	int status;
-	int p[2];
-	int *start;
-	char *input;
-	int *cat_counter;
-	int *stop_cat;
-	int* has_heredoc;
-	int* executed_heredoc;
-	int* stop_cat_right_child;
+	struct pipecmd	*pcmd;
+	struct execcmd	*ecmd;
+	struct redircmd	*rcmd;
+	int				saved_stdin;
+	int				saved_stdout;
+	int				status;
+	int				p[2];
+	int				*start;
+	char			*input;
+	int				*cat_counter;
+	int				*stop_cat;
+	int				*has_heredoc;
+	int				*executed_heredoc;
+	int				*stop_cat_right_child;
 }					t_main;
 
 typedef struct parseexec
 {
-	char *q;
-	char *eq;
-	int tok;
-	int argc;
-} t_parseexec;
+	char			*q;
+	char			*eq;
+	int				tok;
+	int				argc;
+}					t_parseexec;
 
 // Main
 // void				runcmd(t_main main, t_env **envir,
 // 						t_export **exp, int *last_exit_status);
-void runcmd(t_main main, t_env **envir, t_export **exp, int *last_exit_status);
+void				initialize_shell(char **ev, t_env **envir, t_export **exp,
+						t_context *context);
+t_main				initialize_main(t_main x);
+void				runcmd(t_main main, t_env **envir, t_export **exp,
+						int *last_exit_status);
 
 int					fork1(void);
 void				panic(char *s);
@@ -217,43 +215,45 @@ void				panic(char *s);
 struct cmd			*parsepipe(char **ps, char *es, struct heredoc **heredoc,
 						int *last_exit_status);
 // t_main				parsecmd(char *s, int *last_exit_status);
-t_main parsecmd(char *s, t_env *envir, int *last_exit_status);
+t_main				parsecmd(char *s, t_env *envir, int *last_exit_status);
 struct cmd			*parseexec(char **ps, char *es, struct heredoc **heredoc,
 						int *last_exit_status);
 
 // Parse redirections
-t_cmd*	parseredirs(t_norm x, t_cmd *cmd, char *es, int *last_exit_status);
+t_cmd				*parseredirs(t_norm x, t_cmd *cmd, char *es,
+						int *last_exit_status);
 // struct cmd			*parseredirs(struct cmd *cmd, char **ps, char *es,
 // 						struct heredoc **heredoc, int *last_exit_status);
 int					gettoken(char **ps, char *es, char **q, char **eq);
 struct cmd			*pipecmd(struct cmd *left, struct cmd *right);
 // struct cmd			*nulterminate(struct cmd *cmd);
-struct cmd* nulterminate(struct cmd *cmd, t_env *envir, int *last_exit_status);
+struct cmd			*nulterminate(struct cmd *cmd, t_env *envir,
+						int *last_exit_status);
 struct cmd			*execcmd(void);
-struct cmd* redircmd(struct cmd *subcmd, t_norm x, int mode, int fd);
+struct cmd			*redircmd(struct cmd *subcmd, t_norm x, int mode, int fd);
 // struct cmd			*redircmd(struct cmd *subcmd, char *file, char *efile,
 // 						int mode, int fd);
 void				redircmd_h(char *argv, char *eargv,
 						struct heredoc **heredoc);
-struct cmd* expand_tree(struct cmd *cmd, t_env *envir, int *last_exit_status);
-
+struct cmd			*expand_tree(struct cmd *cmd, t_env *envir,
+						int *last_exit_status);
 
 // execution
-t_env	*execute_builtin(t_norm x, char echar[MAXARGS],
-	int *last_exit_status, t_export **exp);
+t_env				*execute_builtin(t_norm x, char echar[MAXARGS],
+						int *last_exit_status, t_export **exp);
 void				modify_args(char **args, t_env *envir,
 						int *last_exit_status);
 bool				is_builtin(char *command);
 char				*allocate_result(char *arg, t_env *envir,
 						int *last_exit_status);
-int					handle_exit_status(char *res , int *last_exit_status);
+int					handle_exit_status(char *res, int *last_exit_status);
 int					handle_var_expansion(char *res, char *arg, int *i,
 						t_env *envir);
 int					handle_exit_status_len(int *last_exit_status);
 int					handle_var_len(char *arg, int *i, t_env *envir);
 
 // signals
-void				setup_signals();
+void				setup_signals(void);
 void				sigint_handler(int sig, siginfo_t *info, void *context);
 void				sigquit_handler(int sig, siginfo_t *info, void *context);
 void				configure_terminal_behavior(void);
@@ -269,7 +269,8 @@ struct cmd			*print_tree(struct cmd *cmd);
 struct cmd			*remove_quotes(struct cmd *cmd);
 // void				update_export(t_export **export, char *variable,
 // 						int *last_exit_status);
-void				update_export(t_export **export, char *variable, char *value, int *last_exit_status);
+void				update_export(t_export **export, char *variable,
+						char *value, int *last_exit_status);
 char				*get_next_line(int fd);
 char				*gnl_strchr(const char *s, int c);
 void				*gnl_memmove(void *dst, const void *src, size_t len);
@@ -283,7 +284,7 @@ void				rl_replace_line(const char *text, int clear_undo);
 
 // Freeing functions
 void				free_env(t_env *env);
-void free_exp_node(t_export *node);
+void				free_exp_node(t_export *node);
 char				**free_arr(char **arr);
 void				free_env_node(t_env *node);
 void				free_export(t_export *export);
@@ -295,20 +296,30 @@ char				*ft_strchr(const char *s, int c);
 void				*ft_memset(void *b, int c, size_t len);
 int					ft_isdigit(int c);
 int					ft_isalpha(int c);
-void	fill_env(t_env **env, char **ev);
-char	**convert_env(t_env **env);
+void				fill_env(t_env **env, char **ev);
+char				**convert_env(t_env **env);
 
 // runcmd
-char	*find_path(char *cmd, char **envp);
-char	*heredoc_exec(t_main main, int *last_exit_status, int *has_heredoc);
-void redir(t_main main, t_env **envir, t_export **exp, int *last_exit_status);
-void exec(t_main main, t_env **envir, t_export **exp, int *last_exit_status);
-void exec_pipe(t_main main, t_env **envir, t_export **exp, int *last_exit_status);
+char				*find_path(char *cmd, char **envp);
+char				*heredoc_exec(t_main main, int *last_exit_status,
+						int *has_heredoc);
+void				redir(t_main main, t_env **envir, t_export **exp,
+						int *last_exit_status);
+void				exec(t_main main, t_env **envir, t_export **exp,
+						int *last_exit_status);
+void				exec_pipe(t_main main, t_env **envir, t_export **exp,
+						int *last_exit_status);
 
 // parsecmd
-void    free_wrong_parsing(char *s, struct cmd *cmd,
-    t_main main, int *last_exit_status);
-int check_quotes(char *str);
-int	peek(char **ps, char *es, char *toks);
+void				free_wrong_parsing(char *s, struct cmd *cmd, t_main main,
+						int *last_exit_status);
+int					check_quotes(char *str);
+int					peek(char **ps, char *es, char *toks);
+void				cat_with_heredoc(t_main main, t_env **envir,
+						t_export **exp);
+void				free_failed_exec(t_main main, t_env **envir, t_export **exp,
+						int *last_exit_status);
+void				run_free_left_child(t_main main, t_env **envir,
+						t_export **exp, int *last_exit_status);
 
 #endif

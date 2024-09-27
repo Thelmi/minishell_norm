@@ -12,11 +12,12 @@
 
 #include "../minishell.h"
 
-static void nulterminate_redir_pipe(t_cmd *cmd, t_env *envir, int *last_exit_status)
+static void	nulterminate_redir_pipe(t_cmd *cmd, t_env *envir,
+		int *last_exit_status)
 {
 	t_pipecmd	*pcmd;
 	t_redircmd	*rcmd;
-	
+
 	if (cmd->type == REDIR)
 	{
 		rcmd = (t_redircmd *)cmd;
@@ -31,7 +32,7 @@ static void nulterminate_redir_pipe(t_cmd *cmd, t_env *envir, int *last_exit_sta
 	}
 }
 
-t_cmd* nulterminate(t_cmd *cmd, t_env *envir, int *last_exit_status)
+t_cmd	*nulterminate(t_cmd *cmd, t_env *envir, int *last_exit_status)
 {
 	t_execcmd	*ecmd;
 	int			i;
@@ -44,8 +45,8 @@ t_cmd* nulterminate(t_cmd *cmd, t_env *envir, int *last_exit_status)
 		i = 0;
 		while (ecmd->argv[i])
 		{
-			ecmd->argv[i] = ft_substr(ecmd->argv[i], 0,
-					ecmd->eargv[i] - ecmd->argv[i]);
+			ecmd->argv[i] = ft_substr(ecmd->argv[i], 0, ecmd->eargv[i]
+					- ecmd->argv[i]);
 			ecmd->echar[i] = ecmd->eargv[i][0];
 			if (ecmd->argv[i] == NULL)
 				return (perror("ft_substr allocation failed"), NULL);
@@ -58,31 +59,29 @@ t_cmd* nulterminate(t_cmd *cmd, t_env *envir, int *last_exit_status)
 	return (cmd);
 }
 
-
-void redircmd_h(char *argv, char *eargv, struct heredoc **heredoc)
+void	redircmd_h(char *argv, char *eargv, struct heredoc **heredoc)
 {
-  struct heredoc *cmd;
+	struct heredoc	*cmd;
+	struct heredoc	*tmp;
 
-  cmd = malloc(sizeof(*cmd));
-  if (!cmd)
-  {
-    perror("malloc");
-    return;
-  }
-  ft_memset(cmd, 0, sizeof(*cmd));
-  cmd->type = HEREDOC;
-  cmd->argv = argv;
-  cmd->eargv = eargv;
-  cmd->next = NULL;
-
-  if (*heredoc == NULL)
-  	*heredoc = cmd;
-  else
-  {
-    struct heredoc *tmp = *heredoc;
-    while (tmp->next)
-		tmp = tmp->next;
-	tmp->next = cmd;
-  }
+	cmd = malloc(sizeof(*cmd));
+	if (!cmd)
+	{
+		perror("malloc");
+		return ;
+	}
+	ft_memset(cmd, 0, sizeof(*cmd));
+	cmd->type = HEREDOC;
+	cmd->argv = argv;
+	cmd->eargv = eargv;
+	cmd->next = NULL;
+	if (*heredoc == NULL)
+		*heredoc = cmd;
+	else
+	{
+		tmp = *heredoc;
+		while (tmp->next)
+			tmp = tmp->next;
+		tmp->next = cmd;
+	}
 }
-

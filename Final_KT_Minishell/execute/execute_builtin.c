@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_builtin.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mrhelmy <mrhelmy@student.42.fr>            +#+  +:+       +#+        */
+/*   By: thelmy <thelmy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 11:18:43 by mrhelmy           #+#    #+#             */
-/*   Updated: 2024/09/27 11:18:46 by mrhelmy          ###   ########.fr       */
+/*   Updated: 2024/09/27 14:03:49 by thelmy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,15 +23,17 @@ static int	count_args(char **args)
 }
 
 static void	execute_command(t_norm x, char echar[MAXARGS],
-	int *last_exit_status, t_export **exp)
+		int *last_exit_status, t_export **exp)
 {
-	int	count;
-	t_norm y;
+	int		count;
+	t_norm	y;
+	char	**args;
+	t_env	**envir;
 
-	char **args = (char **)(x.var1);
-	t_env **envir = (t_env **)(x.var2);
-	y.var1 = (void**)args;
-	y.var2 = (void**)envir;
+	args = (char **)(x.var1);
+	envir = (t_env **)(x.var2);
+	y.var1 = (void **)args;
+	y.var2 = (void **)envir;
 	count = count_args(args);
 	if (ft_strcmp("echo", args[0]) == true)
 		echo(args, echar);
@@ -48,20 +50,21 @@ static void	execute_command(t_norm x, char echar[MAXARGS],
 	}
 }
 
-t_env	*execute_builtin(t_norm x, char echar[MAXARGS],
-	int *last_exit_status, t_export **exp)
+t_env	*execute_builtin(t_norm x, char echar[MAXARGS], int *last_exit_status,
+		t_export **exp)
 {
-	t_norm y;
+	t_norm	y;
+	t_env	**envir;
+	char	**args;
 
-	t_env **envir = (t_env **)(x.var1);
-	char **args = (char **)(x.var2);
+	envir = (t_env **)(x.var1);
+	args = (char **)(x.var2);
 	if (!args || !args[0])
 		return (*envir);
 	*last_exit_status = 0;
-	y.var1 = (void**)args;
-	y.var2 = (void**)envir;
+	y.var1 = (void **)args;
+	y.var2 = (void **)envir;
 	execute_command(y, echar, last_exit_status, exp);
-	// execute_command(args, envir, echar, last_exit_status, exp);
 	if (ft_strcmp("unset", args[0]) == true)
 	{
 		if (args[1] != NULL)
@@ -71,12 +74,8 @@ t_env	*execute_builtin(t_norm x, char echar[MAXARGS],
 		}
 	}
 	else if (ft_strcmp("env", args[0]) == true)
-	{
 		env_func(*envir, last_exit_status);
-	}
 	else if (ft_strcmp("exit", args[0]) == true)
-	{
 		builtin_exit(args, last_exit_status);
-	}
 	return (*envir);
 }

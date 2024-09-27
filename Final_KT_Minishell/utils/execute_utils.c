@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mrhelmy <mrhelmy@student.42.fr>            +#+  +:+       +#+        */
+/*   By: thelmy <thelmy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 03:10:43 by thelmy            #+#    #+#             */
-/*   Updated: 2024/09/26 19:54:08 by mrhelmy          ###   ########.fr       */
+/*   Updated: 2024/09/27 15:11:09 by thelmy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,6 @@ int	fork1(void)
 	return (pid);
 }
 
-
-
 int	peek(char **ps, char *es, char *toks)
 {
 	char	*s;
@@ -43,37 +41,36 @@ int	peek(char **ps, char *es, char *toks)
 	return (*s && ft_strchr(toks, *s));
 }
 
-
-int check_quotes(char *str)
+int	check_quotes(char *str)
 {
-    int i;
-    int double_counter;
-    int single_counter;
+	int	i;
+	int	double_counter;
+	int	single_counter;
 
-    i = 0;
-    double_counter = 0;
-    single_counter = 0;
-    while (str[i])
-    {
-        if (str[i] == '\"')
-            double_counter++;
-        if (str[i] == '\'')
-            single_counter++;
-        i++;
-    }
-    if (double_counter%2 != 0)
-        return (1);
-    if (single_counter%2 != 0)
-        return (1);
-    return (0);
+	i = 0;
+	double_counter = 0;
+	single_counter = 0;
+	while (str[i])
+	{
+		if (str[i] == '\"')
+			double_counter++;
+		if (str[i] == '\'')
+			single_counter++;
+		i++;
+	}
+	if (double_counter % 2 != 0)
+		return (1);
+	if (single_counter % 2 != 0)
+		return (1);
+	return (0);
 }
 
-void    free_wrong_parsing(char *s, struct cmd *cmd,
-    t_main main, int *last_exit_status)
+void	free_wrong_parsing(char *s, struct cmd *cmd, t_main main,
+		int *last_exit_status)
 {
 	write(2, "minishell: syntax error: unexpected token ", 42);
 	write(2, s, ft_strlen(s));
-	write (1, "\n", 1);
+	write(1, "\n", 1);
 	*last_exit_status = 2;
 	freecmd(cmd, 1);
 	freeheredoc(main.heredoc);

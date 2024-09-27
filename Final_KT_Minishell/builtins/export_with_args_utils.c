@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export_with_args_utils.c                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mrhelmy <mrhelmy@student.42.fr>            +#+  +:+       +#+        */
+/*   By: thelmy <thelmy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/18 14:38:17 by krazikho          #+#    #+#             */
-/*   Updated: 2024/09/26 22:24:05 by mrhelmy          ###   ########.fr       */
+/*   Updated: 2024/09/27 13:53:11 by thelmy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,10 +31,10 @@ int	is_valid_identifier(const char *str)
 	return (1);
 }
 
-static void add_export_node(t_export **export, t_export *new_node,
-    char *variable, int *last_exit_status)
+static void	add_export_node(t_export **export, t_export *new_node,
+		char *variable, int *last_exit_status)
 {
-    if (new_node != NULL)
+	if (new_node != NULL)
 	{
 		new_node->next = *export;
 		*export = new_node;
@@ -46,6 +46,7 @@ static void add_export_node(t_export **export, t_export *new_node,
 		*last_exit_status = 1;
 	}
 }
+
 void	update_export(t_export **export, char *variable, char *value,
 		int *last_exit_status)
 {
@@ -66,5 +67,5 @@ void	update_export(t_export **export, char *variable, char *value,
 		tmp = tmp->next;
 	}
 	new_node = create_export_nodes(variable, value);
-    add_export_node(export, new_node, variable, last_exit_status);
+	add_export_node(export, new_node, variable, last_exit_status);
 }

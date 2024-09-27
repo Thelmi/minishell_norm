@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   other_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mrhelmy <mrhelmy@student.42.fr>            +#+  +:+       +#+        */
+/*   By: thelmy <thelmy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/18 15:40:04 by krazikho          #+#    #+#             */
-/*   Updated: 2024/09/26 22:45:11 by mrhelmy          ###   ########.fr       */
+/*   Updated: 2024/09/27 16:42:00 by thelmy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ struct cmd	*print_tree(struct cmd *cmd)
 		print_tree(pcmd->right);
 	}
 	return (cmd);
-} // leave it there
+}
 
 int	wordcount(char *str, char sep)
 {

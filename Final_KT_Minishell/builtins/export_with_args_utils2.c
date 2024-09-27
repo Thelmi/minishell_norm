@@ -12,7 +12,7 @@
 
 #include "../minishell.h"
 
-int allocate_env_node(t_env	*tmp, int *last_exit_status)
+int	allocate_env_node(t_env *tmp, int *last_exit_status)
 {
 	tmp->value = malloc(1);
 	if (tmp->value == NULL)
@@ -25,7 +25,7 @@ int allocate_env_node(t_env	*tmp, int *last_exit_status)
 	return (1);
 }
 
-int available_env_args(t_env **env, char *variable, char *value,
+int	available_env_args(t_env **env, char *variable, char *value,
 		int *last_exit_status)
 {
 	t_env	*tmp;
@@ -43,8 +43,7 @@ int available_env_args(t_env **env, char *variable, char *value,
 			tmp->variable = variable;
 			if (value != NULL)
 				tmp->value = value;
-			else
-			if (!allocate_env_node(tmp, last_exit_status))
+			else if (!allocate_env_node(tmp, last_exit_status))
 				return (1);
 			return (1);
 		}
@@ -53,7 +52,7 @@ int available_env_args(t_env **env, char *variable, char *value,
 	return (0);
 }
 
-int allocate_value(char *variable, char *value, int *last_exit_status)
+int	allocate_value(char *variable, char *value, int *last_exit_status)
 {
 	if (value == NULL)
 	{

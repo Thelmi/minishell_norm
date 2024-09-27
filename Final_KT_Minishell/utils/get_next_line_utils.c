@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line_utils.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mrhelmy <mrhelmy@student.42.fr>            +#+  +:+       +#+        */
+/*   By: thelmy <thelmy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/13 20:14:46 by thelmy            #+#    #+#             */
-/*   Updated: 2024/09/26 22:36:09 by mrhelmy          ###   ########.fr       */
+/*   Updated: 2024/09/27 16:59:22 by thelmy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,12 +87,14 @@ char	*gnl_strjoin(char *s1, char *s2)
 	char	*str;
 	int		i;
 	int		j;
+	int		len;
 
 	i = 0;
 	j = 0;
-	str = malloc(sizeof(char) * (enhanced_strlen(s1, 3) + enhanced_strlen(s2, 2) + 1));
+	len = enhanced_strlen(s1, 3) + enhanced_strlen(s2, 2) + 1;
+	str = malloc(sizeof(char) * (len));
 	if (!str && gnl_free_str(&s1))
-		return (perror("malloc"),(NULL));
+		return (perror("malloc"), (NULL));
 	while (s1 != NULL && s1[i] != '\0')
 	{
 		str[i] = s1[i];

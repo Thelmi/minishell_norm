@@ -12,8 +12,8 @@
 
 #include "../minishell.h"
 
-static int	get_token_extend(char **s, char *es,
-    char *whitespace, char *symbols)
+static int	get_token_extend(char **s, char *es, char *whitespace,
+		char *symbols)
 {
 	while ((*s) < es && ft_strchr(whitespace, *(*s)))
 		(*s)++;
@@ -40,8 +40,8 @@ static int	get_token_extend(char **s, char *es,
 	return ('a');
 }
 
-static int	get_token_extend_red(char **s, char *es,
-    char *whitespace, char *symbols)
+static int	get_token_extend_red(char **s, char *es, char *whitespace,
+		char *symbols)
 {
 	int	ret;
 

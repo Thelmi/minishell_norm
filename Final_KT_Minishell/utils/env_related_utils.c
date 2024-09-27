@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_related_utils.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mrhelmy <mrhelmy@student.42.fr>            +#+  +:+       +#+        */
+/*   By: thelmy <thelmy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/18 21:31:26 by mrhelmy           #+#    #+#             */
-/*   Updated: 2024/09/26 21:46:44 by mrhelmy          ###   ########.fr       */
+/*   Updated: 2024/09/27 15:17:24 by thelmy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ char	*getcopyenv(char *str, t_env **envir)
 	while (tmp != NULL)
 	{
 		if (ft_strcmp(tmp->variable, str) == true)
-		{                  
+		{
 			return (tmp->value);
 		}
 		tmp = tmp->next;
@@ -119,7 +119,7 @@ t_env	*storing_env(char **ev)
 				substr_after_char(ev[i], '='));
 		if (!newnode)
 			return (free_env(env), NULL);
-		tmp ->next = newnode;
+		tmp->next = newnode;
 		tmp = tmp->next;
 		i++;
 	}
