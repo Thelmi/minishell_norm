@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: thelmy <thelmy@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mrhelmy <mrhelmy@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 11:27:45 by mrhelmy           #+#    #+#             */
-/*   Updated: 2024/09/27 17:28:41 by thelmy           ###   ########.fr       */
+/*   Updated: 2024/09/28 14:00:58 by mrhelmy          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,8 @@ int	execute_cmd(t_main main, t_env **envir, t_export **exp,
 	else if (cmd->type == REDIR)
 	{
 		redir(main, envir, exp, last_exit_status);
-		if (main.input)
-			free(main.input);
+		// if (main.input)
+		// 	free(main.input);
 	}
 	else if (cmd->type == PIPE)
 	{

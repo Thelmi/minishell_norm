@@ -3,73 +3,77 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: thelmy <thelmy@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mrhelmy <mrhelmy@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/14 14:58:22 by krazikho          #+#    #+#             */
-/*   Updated: 2024/09/27 17:53:14 by thelmy           ###   ########.fr       */
+/*   Updated: 2024/09/28 14:57:41 by mrhelmy          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	no_env(char **tmp)
+int no_env(char **tmp)
 {
-	printf("such a dangerous behavior, keep ur children safe\n");
-	if (tmp)
-		free_double_pointer(tmp);
-	tmp = NULL;
+    printf("such a dangerous behavior, keep ur children safe\n");
+    if (tmp)
+        free_double_pointer(tmp);
+    tmp = NULL;
+    return (1);
 }
 
-t_main	reset_main(t_main x, char *command)
+t_main reset_main(t_main x, char *command)
 {
-	static int	start;
+    static int start;
 
-	start = 0;
-	x = initialize_main(x);
-	x.command = command;
-	x.start = &start;
-	x.input = NULL;
-	x.cat_counter = &start;
-	return (x);
+    start = 0;
+    x = initialize_main(x);
+    x.command = command;
+    x.start = &start;
+    x.input = NULL;
+    x.cat_counter = &start;
+    return (x);
 }
 
-void	run_main(t_env **envir, t_export **exp, t_context *context,
-		char *command)
+char ** run_main(t_env **envir, t_export **exp,
+		t_context *context, char *command)
 {
-	static char	**tmp = 0;
-	t_main		x;
+    static char **tmp = 0;
 
-	if (envir && *envir)
-	{
-		(*envir)->ev = convert_env(envir);
-		tmp = (*envir)->ev;
-		signal(SIGQUIT, SIG_IGN);
-		signal(SIGINT, SIG_IGN);
-		fill_env(envir, (*envir)->ev);
-		add_history(command);
-		x = parsecmd(command, *envir, &context->last_exit_status);
-		x = reset_main(x, command);
-		if (x.cmd)
-			runcmd(x, envir, exp, &context->last_exit_status);
-		if (x.cmd)
-			freecmd(x.cmd, 0);
-		if (envir && *envir && (*envir)->ev)
-			free_double_pointer((*envir)->ev);
-	}
-	else
-	{
-		no_env(tmp);
-		tmp = NULL;
-	}
+    if (envir && *envir)
+    {
+        (*envir)->ev = convert_env(envir);
+        tmp = (*envir)->ev;
+        signal(SIGQUIT, SIG_IGN);
+        signal(SIGINT, SIG_IGN);
+        fill_env(envir, (*envir)->ev);
+        add_history(command);
+        t_main x = parsecmd(command, *envir, &context->last_exit_status);
+        x = reset_main(x, command);
+        if (x.cmd)
+            runcmd(x, envir, exp, &context->last_exit_status);
+        if (x.cmd)
+            freecmd(x.cmd, 0);
+        if (envir && *envir && (*envir)->ev)
+        {
+            free_double_pointer((*envir)->ev);
+            tmp = NULL;
+        }
+    }
+    else if (no_env(tmp))
+        tmp = NULL;
+    return (tmp);
 }
 
-static void	command_loop(t_env **envir, t_export **exp, t_context *context)
+static void	command_loop(t_env **envir, t_export **exp,
+		t_context *context)
 {
 	char	*command;
+    char    **tmp;
 
+    tmp = NULL;
 	while (1)
 	{
-		setup_signals();
+        setup_signals();
 		command = readline("minishell$ ");
 		if (command == NULL)
 		{
@@ -77,9 +81,12 @@ static void	command_loop(t_env **envir, t_export **exp, t_context *context)
 			break ;
 		}
 		if (*command)
-			run_main(envir, exp, context, command);
+            tmp = run_main(envir, exp, context, command);
 		free(command);
 	}
+    if (tmp)
+        no_env(tmp);
+    tmp = NULL;
 	free_env(*envir);
 	free_export(*exp);
 }

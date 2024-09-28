@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: thelmy <thelmy@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mrhelmy <mrhelmy@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 11:16:49 by mrhelmy           #+#    #+#             */
-/*   Updated: 2024/09/27 17:57:33 by thelmy           ###   ########.fr       */
+/*   Updated: 2024/09/28 13:57:26 by mrhelmy          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,10 +33,20 @@
 # define HEREDOC 5
 # define MAXARGS 10000
 
+typedef struct execcmd
+{
+	int				type;
+	char			*argv[MAXARGS];
+	char			*eargv[MAXARGS];
+	char			echar[MAXARGS];
+	int				cat_flag;
+}					t_execcmd;
+
 typedef struct s_norm
 {
 	void			**var1;
 	void			**var2;
+	t_execcmd	    *cmd;
 }					t_norm;
 
 typedef struct s_context
@@ -134,14 +144,6 @@ typedef struct cmd
 	int				type;
 }					t_cmd;
 
-typedef struct execcmd
-{
-	int				type;
-	char			*argv[MAXARGS];
-	char			*eargv[MAXARGS];
-	char			echar[MAXARGS];
-	int				cat_flag;
-}					t_execcmd;
 
 typedef struct heredoc
 {
